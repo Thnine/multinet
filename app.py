@@ -130,5 +130,36 @@ def mesMarkov():
     return metrix
 
 
+## 王子潇布局调用的api
+@app.route('/api/getWangZixiaoLayout',methods=['POST'])
+def getWangZixiaoLayout():
+    import multinet as mn
+    reqParams = json.loads(request.get_data())
+    layer_data = reqParams['layer_data']
+    node_data = reqParams['node_data']
+    edge_data = reqParams['edge_data']
+    g1 = mn.build_network_pVersion(layer_data=layer_data,edge_data=edge_data,node_data=node_data)
+    layout1 = mn.independent_layout(g1)
+    
+    ## 解决numpy数据无法进行json编码的问题
+    class NpEncoder(json.JSONEncoder):
+        def default(self, obj):
+            if isinstance(obj, (np.int_, np.intc, np.intp, np.int8,
+                                np.int16, np.int32, np.int64, np.uint8,
+                                np.uint16, np.uint32, np.uint64)):
+                return int(obj)
+            elif isinstance(obj, (np.float_, np.float16, np.float32,
+                                np.float64)):
+                return float(obj)
+            elif isinstance(obj, (np.ndarray,)):
+                return obj.tolist()
+            elif isinstance(obj, (np.bool_,)):
+                return bool(obj)
+            elif isinstance(obj, np.ndarray):
+                return obj.tolist()
+            return json.JSONEncoder.default(self, obj)
+
+    return json.dumps(layout1,cls=NpEncoder)
+
 if __name__ == '__main__':
     app.run()
