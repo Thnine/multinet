@@ -161,5 +161,26 @@ def getWangZixiaoLayout():
 
     return json.dumps(layout1,cls=NpEncoder)
 
+## 获取联通子图
+@app.route('/api/getConnectedSubGraph',methods=['POST'])
+def getConnectedSubGraph():
+    import networkx as nx
+    reqParams = json.loads(request.get_data())
+    nodes = reqParams['nodes'] #[id1,id2,...]
+    links = reqParams['links'] #[[id3,id4],[id8,id4],...]
+    to_find_node = reqParams['to_find_node'] #id5
+    print(nodes)
+    print(links)
+    print(to_find_node)
+    G = nx.Graph()
+    for n in nodes:
+        G.add_node(n)
+    for l in links:
+        G.add_edge(l[0],l[1])
+    for v in nx.connected_components(G):
+        if to_find_node in v:
+            return json.dumps(list(v))
+
+
 if __name__ == '__main__':
     app.run()
