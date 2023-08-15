@@ -169,9 +169,7 @@ def getConnectedSubGraph():
     nodes = reqParams['nodes'] #[id1,id2,...]
     links = reqParams['links'] #[[id3,id4],[id8,id4],...]
     to_find_node = reqParams['to_find_node'] #id5
-    print(nodes)
-    print(links)
-    print(to_find_node)
+
     G = nx.Graph()
     for n in nodes:
         G.add_node(n)
