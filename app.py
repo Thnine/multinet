@@ -125,6 +125,7 @@ def mesMarkov():
     data_dict=request.get_json()
     data = data_dict['data']
     parameter = data_dict['parameter']
+
     metrix = path.Tn_paths(data,parameter['k'],parameter['delta'])
 
     return metrix
@@ -178,7 +179,15 @@ def getConnectedSubGraph():
     for v in nx.connected_components(G):
         if to_find_node in v:
             return json.dumps(list(v))
+ 
 
+
+## test
+@app.route('/api/test',methods=['POST'])
+def test():
+    reqParams = request.get_data()
+    print(reqParams)
+    return json.dumps(['hh'])
 
 if __name__ == '__main__':
     app.run()
