@@ -140,7 +140,7 @@ def getWangZixiaoLayout():
     node_data = reqParams['node_data']
     edge_data = reqParams['edge_data']
     g1 = mn.build_network_pVersion(layer_data=layer_data,edge_data=edge_data,node_data=node_data)
-    layout1 = mn.independent_layout(g1)
+    layout1 = mn.wang_layout(g1)
     
     ## 解决numpy数据无法进行json编码的问题
     class NpEncoder(json.JSONEncoder):
@@ -159,6 +159,7 @@ def getWangZixiaoLayout():
             elif isinstance(obj, np.ndarray):
                 return obj.tolist()
             return json.JSONEncoder.default(self, obj)
+    
 
     return json.dumps(layout1,cls=NpEncoder)
 
@@ -190,4 +191,4 @@ def test():
     return json.dumps(['hh'])
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0',port=5050)
